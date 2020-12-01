@@ -42,6 +42,13 @@ const profileSlice = createSlice({
         draft.error = action.payload
       })
     },
+    setProfile: (state, action) => {
+      const data = action.payload
+      produce(state, (draft) => {
+        draft.error = []
+        draft.originalProfile = data
+      })
+    },
   },
   extraReducers: {
     [authOut]: (state, action) => {

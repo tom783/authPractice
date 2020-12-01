@@ -23,7 +23,7 @@ const authSlice = createSlice({
   name: 'authSlice',
   initialState: initState,
   reducers: {
-    authPending: (state, action) => {
+    authRequest: (state, action) => {
       produce(state, (draft) => {
         draft.isFetching = true
         draft.error = []
@@ -64,7 +64,7 @@ const authSlice = createSlice({
 })
 
 export const {
-  authPending,
+  authRequest,
   authSuccess,
   authFailure,
   errorCatch,

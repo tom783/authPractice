@@ -1,8 +1,9 @@
-import * as React from "react"
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom"
-import SignIn from "../pages/SignIn"
-import SignUp from "../pages/SignUp"
-import AuthTest from "../pages/AuthTest"
+import * as React from 'react'
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import SignIn from '../pages/SignIn'
+import SignUp from '../pages/SignUp'
+import AuthTest from '../pages/AuthTest'
+import Main from '../pages/Main'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           :
           <Redirect to="/signIn" />
         } */}
+        <Route exact path='/' component={Main} />
         <Route exact path='/signIn' component={SignIn} />
         <Route exact path='/signUp' component={SignUp} />
         <AuthTest />

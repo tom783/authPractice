@@ -1,6 +1,5 @@
 import * as React from 'react'
 import {Switch, Route, Redirect, BrowserRouter as Router} from 'react-router-dom'
-import Main from '../Main'
 import SignIn from '../SignIn'
 import Test from '../Test'
 
@@ -26,9 +25,6 @@ const AuthTest = () => {
       {
         pass?
         <Switch>
-          <Route exact path="/">
-            <Main />
-          </Route>
           <Route exact path="/test">
             <Test />
           </Route>
