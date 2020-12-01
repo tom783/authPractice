@@ -9,7 +9,7 @@ const path = {
 }
 
 function* signin({ payload }) {
-  console.log('saga signin', payload)
+  console.log('saga signin ', payload)
   const { data } = yield call(postAxios, path, payload)
 }
 
