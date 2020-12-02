@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import {useImmer} from 'use-immer'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import Validationinput from '../../components/ValidationInput'
 import {emailValidator, passwordValidator} from '../../utils/validators'
@@ -24,12 +24,22 @@ const initState = {
 
 const SignIn = (props) => {
   const [state, setState] = useImmer(initState)
+  const {auth} = useSelector(state => state)
 
   const dispath = useDispatch()
 
   const onSubmit = e => {
     e.preventDefault()
-    dispath(authRequest(state))
+    if(!auth.isFetching){
+      dispath(authRequest({type: 'signin', data: state}))
+    }
+  }
+
+  const onClickToGoogleSignin = e => {
+    e.preventDefault()
+    if(!auth.isFetching){
+      dispath(authRequest({type: 'signinGoogle', data: {isSignedin: true}}))
+    }
   }
 
   return (
@@ -43,6 +53,9 @@ const SignIn = (props) => {
           <div>
             <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={setState} />
             <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={setState} />
+          </div>
+          <div>
+            <a href="#" onClick={onClickToGoogleSignin}>구글 로그인</a>
           </div>
           <div>
             <input type="submit" value="로그인" />

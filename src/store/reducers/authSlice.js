@@ -24,41 +24,29 @@ const authSlice = createSlice({
   initialState: initState,
   reducers: {
     authRequest: (state, action) => {
-      produce(state, (draft) => {
-        draft.isFetching = true
-        draft.error = []
-        draft.isValid = false
-      })
+      state.isFetching = true
+      state.error = []
+      state.isValid = false
     },
     authSuccess: (state, action) => {
-      produce(state, (draft) => {
-        draft.isFetching = false
-        draft.isValid = false
-      })
+      state.isFetching = false
+      state.isValid = true
     },
     authFailure: (state, action) => {
-      produce(state, (draft) => {
-        draft.isFetching = false
-        draft.error = action.payload
-      })
+      state.isFetching = false
+      state.error = action.payload
     },
     errorCatch: (state, action) => {
-      produce(state, (draft) => {
-        draft.isFetching = false
-        draft.error = action.payload
-      })
+      state.isFetching = false
+      state.error = action.payload
     },
     authOut: (state, action) => {
-      produce(state, (draft) => {
-        draft.state = action.type
-        draft.error = []
-        draft.fields = initState.fields
-      })
+      state.state = action.type
+      state.error = []
+      state.fields = initState.fields
     },
     setInit: (state, action) => {
-      produce(state, (draft) => {
-        draft = initState
-      })
+      state = initState
     },
   },
 })

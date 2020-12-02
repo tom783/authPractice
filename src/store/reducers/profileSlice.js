@@ -24,44 +24,34 @@ const profileSlice = createSlice({
   initialState: initState,
   reducers: {
     getProfilePending: (state, action) => {
-      produce(state, (draft) => {
-        draft.isFetching = true
-        draft.error = []
-      })
+      state.isFetching = true
+      state.error = []
     },
     getProfileSuccess: (state, action) => {
       const data = action.payload
-      produce(state, (draft) => {
-        draft.isFetching = false
-        draft.originalProfile = data
-      })
+
+      state.isFetching = false
+      state.originalProfile = data
     },
     getProfileFailure: (state, action) => {
-      produce(state, (draft) => {
-        draft.isFetching = false
-        draft.error = action.payload
-      })
+      state.isFetching = false
+      state.error = action.payload
     },
     setProfile: (state, action) => {
       const data = action.payload
-      produce(state, (draft) => {
-        draft.error = []
-        draft.originalProfile = data
-      })
+
+      state.error = []
+      state.originalProfile = data
     },
   },
   extraReducers: {
     [authOut]: (state, action) => {
-      produce(state, (draft) => {
-        draft.state = action.type
-        draft.error = []
-        draft.originalProfile = initState.originalProfile
-      })
+      state.state = action.type
+      state.error = []
+      state.originalProfile = initState.originalProfile
     },
     [setInit]: (state, action) => {
-      produce(state, (draft) => {
-        draft = initState
-      })
+      state = initState
     },
   },
 })
@@ -70,5 +60,6 @@ export const {
   getProfilePending,
   getProfileSuccess,
   getProfileFailure,
+  setProfile,
 } = profileSlice.actions
 export default profileSlice.reducer
