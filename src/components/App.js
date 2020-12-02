@@ -1,24 +1,19 @@
 import * as React from 'react'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import PrivateRoute from '../components/PrivateRoute'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
-import AuthTest from '../pages/AuthTest'
+import Test from '../pages/Test'
 import Main from '../pages/Main'
 
 function App() {
   return (
     <Router>
       <Switch>
-        {/* {
-        localStorage.getItem('accessToken') ? 
-          <AuthTest />
-          :
-          <Redirect to="/signIn" />
-        } */}
+        <PrivateRoute exact path='/test' component={Test} />
         <Route exact path='/' component={Main} />
-        <Route exact path='/signIn' component={SignIn} />
-        <Route exact path='/signUp' component={SignUp} />
-        <AuthTest />
+        <Route exact path='/signin' component={SignIn} />
+        <Route exact path='/signup' component={SignUp} />
       </Switch>
     </Router>
   )
