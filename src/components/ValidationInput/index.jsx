@@ -28,6 +28,12 @@ const initState = {
   value: ''
 }
 
+export const handleSetState = (key, setState) => value => {
+  setState && setState(draft => {
+    draft[key] = value
+  })
+}
+
 const ValidationInput = ({
   type,
   placeholder,
@@ -43,11 +49,9 @@ const ValidationInput = ({
 
     setState(draft => {
       draft.value = value
-      draft.msg = validator(value)
+      draft.msg = validator ? validator(value) : ''
     })
-    handleSetState && handleSetState(draft => {
-      draft[type] = value
-    })
+    handleSetState && handleSetState(value)
   }
 
   return (

@@ -5,9 +5,10 @@ import { call } from 'redux-saga/effects'
 const URL = 'http://127.0.0.1:3000/api/v1'
 const PATH = {
   signin: '/auth/checkAuth',
-  signup: '/auth/checkAuth',
+  signup: '/auth/authenticate',
   signout: '/auth/checkAuth',
   signinGoogle: '/auth/authenticate_openid',
+  signupGoogle: '/auth/authenticate_openid',
 }
 
 export const postAxios = (path, params) => {
@@ -27,4 +28,14 @@ export const signinApi = (data) => {
 export const signinGoogleApi = (data) => {
   const params = data
   return call(postAxios, PATH.signinGoogle, params)
+}
+
+export const signupApi = (data) => {
+  const params = data
+  return call(postAxios, PATH.signup, params)
+}
+
+export const signupGoogleApi = (data) => {
+  const params = data
+  return call(postAxios, PATH.signupGoogle, params)
 }

@@ -4,11 +4,11 @@ import {useImmer} from 'use-immer'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 
-import Validationinput from '../../components/ValidationInput'
+import Validationinput, {handleSetState} from '../../components/ValidationInput'
 import {emailValidator, passwordValidator} from '../../utils/validators'
 import {authRequest} from '../../store/reducers/authSlice'
 import {signinApi, signinGoogleApi} from '../../utils/api'
-import {signinFlow, signinGoogle} from '../../utils/flowInSaga'
+import {signinFlow, signinGoogleFlow} from '../../utils/flowInSaga'
 
 const Wrap = styled.div``
 
@@ -25,7 +25,7 @@ const initState = {
   password: ''
 }
 
-const SignIn = (props) => {
+const SignIn = () => {
   const [state, setState] = useImmer(initState)
   const {auth} = useSelector(state => state)
 
@@ -42,7 +42,7 @@ const SignIn = (props) => {
   const onClickToGoogleSignin = e => {
     e.preventDefault()
     if(!auth.isFetching){
-      dispath(authRequest({apiCall: () => signinGoogleApi({isSignedin: true}), sagaFlow: signinGoogle}))
+      dispath(authRequest({apiCall: () => signinGoogleApi({isSignedin: true}), sagaFlow: signinGoogleFlow}))
     }
   }
 
@@ -55,8 +55,8 @@ const SignIn = (props) => {
         <h2>login</h2>
         <LoginForm onSubmit={onSubmit}>
           <div>
-            <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={setState} />
-            <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={setState} />
+            <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setState)} />
+            <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setState)} />
           </div>
           <div>
             <a href="#" onClick={onClickToGoogleSignin}>구글 로그인</a>

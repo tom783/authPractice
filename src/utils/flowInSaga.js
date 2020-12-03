@@ -6,6 +6,17 @@ export const signinFlow = ({ data, history }) => {
   return put(setProfile(data))
 }
 
-export const signinGoogle = ({ data }) => {
-  window.location.href = data
+export const signinGoogleFlow = ({ data }) => {
+  const url = data
+  window.location.href = url
+}
+
+export const signupFlow = ({ data, history }) => {
+  history.push('/signin')
+  return put(setProfile(data))
+}
+
+export const signupGoogleFlow = ({ data }) => {
+  const url = data
+  window.location.href = url
 }
