@@ -1,55 +1,19 @@
 import { all, takeEvery, call, put } from 'redux-saga/effects'
-import Cookie from 'js-cookie'
 import * as R from 'ramda'
-import { createBrowserHistory } from 'history'
 import { authRequest, authSuccess, authFailure } from '../reducers/authSlice'
 import { setProfile } from '../reducers/profileSlice'
-import { postAxios } from '../../utils/api'
-
-const path = {
-  signin: '/auth/checkAuth',
-  signup: '/auth/checkAuth',
-  signout: '/auth/checkAuth',
-  signinGoogle: '/auth/authenticate_openid',
-}
-const history = createBrowserHistory()
 
 function* authIn({ payload }) {
+  const { apiCall, sagaFlow, history } = payload
+
   try {
-    const callApiF = R.cond([
-      [R.equals('signin'), () => call(postAxios, path.signin, payload.data)],
-      [
-        R.equals('signinGoogle'),
-        () => call(postAxios, path.signinGoogle, payload.data),
-      ],
-      [R.T, () => null],
-    ])
-    // const { data, type } = yield call(postAxios, path, payload.data)
     const {
       data: { data, type },
-    } = yield callApiF(payload.type)
+    } = yield apiCall()
 
     if (type) {
       yield put(authSuccess())
-
-      const flowControlF = R.cond([
-        [
-          R.equals('signin'),
-          () => {
-            history.replace('/test')
-            return put(setProfile(data))
-          },
-        ],
-        [
-          R.equals('signinGoogle'),
-          () => {
-            window.location.href = data
-          },
-        ],
-        [R.T, () => null],
-      ])
-
-      yield flowControlF(payload.type)
+      yield sagaFlow({ data, history })
     } else {
       yield put(authFailure(data))
     }

@@ -22,8 +22,19 @@ const initState = {
 const SignUp = () => {
   const [state, setState] = useImmer(initState)
 
-  const onSubmit = () => {}
-  
+  const onChange = e => {
+    const {value} = e.target
+    setState(draft => {
+      draft.name = value
+    })
+  }
+
+  const onSubmit = e => {
+    e.preventDefault()
+    
+
+  }
+
   const onClickToGoogleSignUp = () => {}
 
 
@@ -36,6 +47,9 @@ const SignUp = () => {
         <h2>login</h2>
         <LoginForm onSubmit={onSubmit}>
           <div>
+            <div>
+              <input type="text" value={state.name} onChange={onChange} />
+            </div>
             <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={setState} />
             <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={setState} />
           </div>

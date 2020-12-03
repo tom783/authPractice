@@ -2,10 +2,13 @@ import * as React from 'react'
 import styled from 'styled-components'
 import {useImmer} from 'use-immer'
 import {useDispatch, useSelector} from 'react-redux'
+import {useHistory} from 'react-router-dom'
 
 import Validationinput from '../../components/ValidationInput'
 import {emailValidator, passwordValidator} from '../../utils/validators'
 import {authRequest} from '../../store/reducers/authSlice'
+import {signinApi, signinGoogleApi} from '../../utils/api'
+import {signinFlow, signinGoogle} from '../../utils/flowInSaga'
 
 const Wrap = styled.div``
 
@@ -27,18 +30,19 @@ const SignIn = (props) => {
   const {auth} = useSelector(state => state)
 
   const dispath = useDispatch()
+  const history = useHistory()
 
   const onSubmit = e => {
     e.preventDefault()
     if(!auth.isFetching){
-      dispath(authRequest({type: 'signin', data: state}))
+      dispath(authRequest({apiCall: () => signinApi(state), sagaFlow: signinFlow, history}))
     }
   }
 
   const onClickToGoogleSignin = e => {
     e.preventDefault()
     if(!auth.isFetching){
-      dispath(authRequest({type: 'signinGoogle', data: {isSignedin: true}}))
+      dispath(authRequest({apiCall: () => signinGoogleApi({isSignedin: true}), sagaFlow: signinGoogle}))
     }
   }
 
