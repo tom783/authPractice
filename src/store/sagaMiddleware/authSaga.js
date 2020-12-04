@@ -4,7 +4,7 @@ import { authRequest, authSuccess, authFailure } from '../reducers/authSlice'
 import { setProfile } from '../reducers/profileSlice'
 
 function* authIn({ payload }) {
-  const { apiCall, sagaFlow, history } = payload
+  const { apiCall, sagaFlow, failSagaFlow, history } = payload
 
   try {
     const {
@@ -13,9 +13,10 @@ function* authIn({ payload }) {
 
     if (type) {
       yield put(authSuccess())
-      yield sagaFlow({ data, history })
+      yield sagaFlow && sagaFlow({ data, history })
     } else {
       yield put(authFailure(data))
+      yield failSagaFlow && failSagaFlow({ data, history })
     }
   } catch (err) {
     yield put(authFailure(err))

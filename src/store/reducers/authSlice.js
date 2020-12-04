@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import produce from 'immer'
 
 export const initState = {
   state: null,
@@ -34,6 +33,7 @@ const authSlice = createSlice({
     },
     authFailure: (state, action) => {
       state.isFetching = false
+      state.isValid = false
       state.error = action.payload
     },
     errorCatch: (state, action) => {
@@ -41,9 +41,7 @@ const authSlice = createSlice({
       state.error = action.payload
     },
     authOut: (state, action) => {
-      state.state = action.type
-      state.error = []
-      state.fields = initState.fields
+      state = initState
     },
     setInit: (state, action) => {
       state = initState

@@ -2,7 +2,7 @@ import * as React from 'react'
 import {useImmer} from 'use-immer'
 import styled from 'styled-components'
 import {useSelector, useDispatch} from 'react-redux'
-import {useHistory} from 'react-router-dom'
+import {useHistory, Link} from 'react-router-dom'
 
 import Validationinput, {handleSetState} from '../../components/ValidationInput'
 import {authRequest} from '../../store/reducers/authSlice'
@@ -12,12 +12,7 @@ import {signupFlow, signupGoogleFlow} from '../../utils/flowInSaga'
 
 const Wrap = styled.div``
 
-const LoginWrap = styled.div`
- h2 {
-    text-align: center;
-  }
-`
-const LoginForm = styled.form``
+const Form = styled.form``
 
 const initState = {
   fullName: '',
@@ -48,25 +43,20 @@ const SignUp = () => {
 
   return (
     <Wrap>
-      <div>
-        <a href="/">home</a>
-      </div>
-      <LoginWrap>
-        <h2>Signup</h2>
-        <LoginForm onSubmit={onSubmit}>
-          <div>
-            <Validationinput type="text" placeholder="이름" disabled={false} handleSetState={handleSetState('fullName', setState)} />
-            <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setState)} />
-            <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setState)} />
-          </div>
-          <div>
-            <a href="#" onClick={onClickToGoogleSignUp}>구글 회원가입</a>
-          </div>
-          <div>
-            <input type="submit" value="회원가입" />
-          </div>
-        </LoginForm>
-      </LoginWrap>
+      <h2>Signup</h2>
+      <Form onSubmit={onSubmit}>
+        <div>
+          <Validationinput type="text" placeholder="이름" disabled={false} handleSetState={handleSetState('fullName', setState)} />
+          <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setState)} />
+          <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setState)} />
+        </div>
+        <div>
+          <Link to="#" onClick={onClickToGoogleSignUp}>구글 회원가입</Link>
+        </div>
+        <div>
+          <input type="submit" value="회원가입" />
+        </div>
+      </Form>
     </Wrap>
   )
 }

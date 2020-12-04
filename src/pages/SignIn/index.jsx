@@ -2,7 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import {useImmer} from 'use-immer'
 import {useDispatch, useSelector} from 'react-redux'
-import {useHistory} from 'react-router-dom'
+import {useHistory, Link} from 'react-router-dom'
 
 import Validationinput, {handleSetState} from '../../components/ValidationInput'
 import {emailValidator, passwordValidator} from '../../utils/validators'
@@ -18,7 +18,7 @@ const LoginWrap = styled.div`
   }
 `
 
-const LoginForm = styled.form``
+const Form = styled.form``
 
 const initState = {
   email: '',
@@ -48,24 +48,19 @@ const SignIn = () => {
 
   return (
     <Wrap>
-      <div>
-        <a href="/">home</a>
-      </div>
-      <LoginWrap>
-        <h2>login</h2>
-        <LoginForm onSubmit={onSubmit}>
-          <div>
-            <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setState)} />
-            <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setState)} />
-          </div>
-          <div>
-            <a href="#" onClick={onClickToGoogleSignin}>구글 로그인</a>
-          </div>
-          <div>
-            <input type="submit" value="로그인" />
-          </div>
-        </LoginForm>
-      </LoginWrap>
+      <h2>login</h2>
+      <Form onSubmit={onSubmit}>
+        <div>
+          <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setState)} />
+          <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setState)} />
+        </div>
+        <div>
+          <Link to="#" onClick={onClickToGoogleSignin}>구글 로그인</Link>
+        </div>
+        <div>
+          <input type="submit" value="로그인" />
+        </div>
+      </Form>
     </Wrap>
   )
 }

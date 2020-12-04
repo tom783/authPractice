@@ -6,13 +6,13 @@ export const fullNameValidator = (value) => {
 }
 
 export const emailValidator = (value) => {
-  if (value.length === 0) return ''
+  if (value.length === 0) return '입력값이 없습니다'
   if (!validator.isEmail(value)) return '이메일 형식에 맞지 않습니다'
   return ''
 }
 
 export const passwordValidator = (value) => {
-  if (value.length === 0) return ''
+  if (value.length === 0) return '입력값이 없습니다'
   if (
     !validator.matches(
       value,

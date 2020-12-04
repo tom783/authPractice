@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import produce from 'immer'
 import { authOut, setInit } from './authSlice'
 
 export const initState = {
@@ -45,12 +44,10 @@ const profileSlice = createSlice({
     },
   },
   extraReducers: {
-    [authOut]: (state, action) => {
-      state.state = action.type
-      state.error = []
-      state.originalProfile = initState.originalProfile
+    authOut: (state, action) => {
+      state = initState
     },
-    [setInit]: (state, action) => {
+    setInit: (state, action) => {
       state = initState
     },
   },
