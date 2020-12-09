@@ -1,30 +1,16 @@
 import { all, takeEvery, call, put } from 'redux-saga/effects'
 import * as R from 'ramda'
-import { authRequest, authSuccess, authFailure } from '../reducers/authSlice'
-import { setProfile } from '../reducers/profileSlice'
+import { authRequest } from '../reducers/authSlice'
 
 function* authIn({ payload }) {
-  const { apiCall, sagaFlow, failSagaFlow, history } = payload
+  const { resData, sagaFlow, failSagaFlow, history } = payload
+  const { data, type } = resData
 
-  try {
-    const {
-      data: { data, type },
-    } = yield apiCall()
-
-    if (type) {
-      yield put(authSuccess())
-      yield sagaFlow && sagaFlow({ data, history })
-    } else {
-      yield put(authFailure(data))
-      yield failSagaFlow && failSagaFlow({ data, history })
-    }
-  } catch (err) {
-    yield put(authFailure(err))
+  if (type) {
+    yield sagaFlow && sagaFlow({ data, history })
+  } else {
+    yield failSagaFlow && failSagaFlow({ data, history })
   }
-}
-
-function* signup({ payload }) {
-  const { data } = yield call()
 }
 
 export default function* authSaga() {

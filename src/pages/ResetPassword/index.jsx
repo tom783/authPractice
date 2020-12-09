@@ -15,8 +15,10 @@ const Wrap = styled.div``
 const Form = styled.form``
 
 const initState = {
+  isFetching: false,
   checkOk: false,
-  isFetching: false
+  type: '',
+  data: null
 }
 
 const formState = {
@@ -27,43 +29,46 @@ const formState = {
 const ResetPassword = (props) => {
   const [state, setState] = useImmer(initState)
   const [form, setForm] = useImmer(formState)
-  const isFetching = useSelector(state => state.auth.isFetching)
-  const checkOk = useSelector(state => state.auth.isValid)
   const {params: {tokenId}} = props.match
   const dispatch = useDispatch()
   const history = useHistory()
   
   const onSubmit = e => {
     e.preventDefault()
-    dispatch(authRequest({apiCall: () => resetPassword({...form, passwordResetToken: tokenId}), sagaFlow: resetPasswordFlow, history}))
-
+    resetPassword({...form, passwordResetToken: tokenId}, setState)
+    setState(draft => {
+      draft.type = 'resetPassword'
+    })
   }
 
   React.useLayoutEffect(() => {
-    dispatch(authRequest({apiCall: () => checkResetPasswordToken(tokenId)}))
+    checkResetPasswordToken(tokenId, setState)
+    setState(draft => {
+      draft.type = 'checkResetPasswordToken'
+    })
   },[])
 
   React.useEffect(() => {
-    if(isFetching) {
+    if(state.data){
       setState(draft => {
         draft.isFetching = true
       })
+      switch(state.type) {
+        case 'checkResetPasswordToken':
+          dispatch(authRequest({resData: state.data}))
+          break
+        case 'resetPassword':
+          dispatch(authRequest({resData: state.data, sagaFlow: resetPasswordFlow, history}))
+          break
+        default:
+          break
+      }
     }else {
       setState(draft => {
         draft.isFetching = false
       })
     }
-    if(checkOk) {
-      setState(draft => {
-        draft.checkOk = true
-      })
-    }else {
-      setState(draft => {
-        draft.checkOk = false
-      })
-    }
-    
-  }, [checkOk, isFetching])
+  }, [state.data])
 
   const resetForm = () => {
     return (
@@ -93,9 +98,9 @@ const ResetPassword = (props) => {
     return <div>error</div>
   }
 
-  const content = isFetching ? 
+  const content = state.isFetching ? 
   Loading() : 
-  checkOk ? 
+  state.checkOk ? 
   resetForm() :
   Error()
 

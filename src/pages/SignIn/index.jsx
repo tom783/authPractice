@@ -21,38 +21,65 @@ const LoginWrap = styled.div`
 const Form = styled.form``
 
 const initState = {
+  type: '',
+  data: null
+}
+
+const formState = {
   email: '',
   password: ''
 }
 
 const SignIn = () => {
   const [state, setState] = useImmer(initState)
+  const [form, setForm] = useImmer(formState)
   const {auth} = useSelector(state => state)
 
   const dispath = useDispatch()
   const history = useHistory()
+  
 
   const onSubmit = e => {
     e.preventDefault()
-    if(!auth.isFetching){
-      dispath(authRequest({apiCall: () => signinApi(state), sagaFlow: signinFlow, history}))
-    }
+    signinApi(form, setState)
+    setState(draft => {
+      draft.type = 'baseLogin'
+    })
   }
 
   const onClickToGoogleSignin = e => {
     e.preventDefault()
-    if(!auth.isFetching){
-      dispath(authRequest({apiCall: () => signinGoogleApi({isSignedin: true}), sagaFlow: signinGoogleFlow}))
-    }
+    signinGoogleApi({isSignedin: true}, setState)
+    setState(draft => {
+      draft.type = 'googleLogin'
+    })
   }
+
+  React.useEffect(() => {
+    if(state.data){
+      switch(state.type) {
+        case 'baseLogin':
+          dispath(authRequest({resData: state.data, sagaFlow: signinFlow, history}))
+          break
+        case 'googleLogin':
+          dispath(authRequest({resData: state.data, sagaFlow: signinGoogleFlow}))
+          break
+        default:
+          break
+      }
+    }
+  }, [state.data])
 
   return (
     <Wrap>
+      <div>
+        {state.data ? <div>done {JSON.stringify(state.data)}</div> : <div>loading</div>}
+      </div>
       <h2>login</h2>
       <Form onSubmit={onSubmit}>
         <div>
-          <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setState)} />
-          <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setState)} />
+          <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setForm)} />
+          <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setForm)} />
         </div>
         <div>
           <Link to="#" onClick={onClickToGoogleSignin}>구글 로그인</Link>

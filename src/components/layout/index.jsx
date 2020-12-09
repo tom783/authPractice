@@ -16,6 +16,7 @@ const Layout = ({children}) => {
   
   const onClickSignOut = e => {
     e.preventDefault()
+    console.log("click")
     Cookies.remove('token')
     dispatch(authOut())
   }

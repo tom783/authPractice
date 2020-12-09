@@ -2,8 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 import { authOut, setInit } from './authSlice'
 
 export const initState = {
-  isFetching: false,
-  error: [],
   originalProfile: {
     id: null,
     fullName: null,
@@ -22,41 +20,25 @@ const profileSlice = createSlice({
   name: 'profileSlice',
   initialState: initState,
   reducers: {
-    getProfilePending: (state, action) => {
-      state.isFetching = true
-      state.error = []
-    },
     getProfileSuccess: (state, action) => {
       const data = action.payload
-
-      state.isFetching = false
       state.originalProfile = data
-    },
-    getProfileFailure: (state, action) => {
-      state.isFetching = false
-      state.error = action.payload
     },
     setProfile: (state, action) => {
       const data = action.payload
-
-      state.error = []
       state.originalProfile = data
     },
   },
-  extraReducers: {
-    authOut: (state, action) => {
-      state = initState
-    },
-    setInit: (state, action) => {
-      state = initState
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(authOut, (state, action) => {
+        state = initState
+      })
+      .addCase(setInit, (state, action) => {
+        state = initState
+      })
   },
 })
 
-export const {
-  getProfilePending,
-  getProfileSuccess,
-  getProfileFailure,
-  setProfile,
-} = profileSlice.actions
+export const { getProfileSuccess, setProfile } = profileSlice.actions
 export default profileSlice.reducer

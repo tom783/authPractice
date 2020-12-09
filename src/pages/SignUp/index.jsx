@@ -15,6 +15,11 @@ const Wrap = styled.div``
 const Form = styled.form``
 
 const initState = {
+  type: '',
+  data: null
+}
+
+const formState = {
   fullName: '',
   email: '',
   password: ''
@@ -22,6 +27,7 @@ const initState = {
 
 const SignUp = () => {
   const [state, setState] = useImmer(initState)
+  const [form, setForm] = useImmer(formState)
   const {auth} = useSelector(state => state)
 
   const dispatch = useDispatch()
@@ -29,26 +35,43 @@ const SignUp = () => {
 
   const onSubmit = e => {
     e.preventDefault()
-    if(!auth.isFetching){
-      dispatch(authRequest({apiCall: () => signupApi(state), sagaFlow: signupFlow, history}))
-    }
+    signupApi(form, setState)
+    setState(draft => {
+      draft.type = 'baseSignup'
+    })
   }
 
   const onClickToGoogleSignUp = e => {
     e.preventDefault()
-    if(!auth.isFetching){
-      dispatch(authRequest({apiCall: () => signupGoogleApi({ isSignedin: false }), sagaFlow: signupGoogleFlow}))
-    }
+    signupGoogleApi({isSignedin: false}, setState)
+    setState(draft => {
+      draft.type = 'googleSignup'
+    })
   }
+
+  React.useEffect(() => {
+    if(state.data) {
+      switch(state.type) {
+        case 'baseSignup':
+          dispatch(authRequest({resData: state.data, sagaFlow: signupFlow, history}))
+          break
+        case 'googleSignup':
+          dispatch(authRequest({resData: state.data, sagaFlow: signupGoogleFlow}))
+          break
+        default:
+          break
+      }
+    }
+  }, [state.data])
 
   return (
     <Wrap>
       <h2>Signup</h2>
       <Form onSubmit={onSubmit}>
         <div>
-          <Validationinput type="text" placeholder="이름" disabled={false} handleSetState={handleSetState('fullName', setState)} />
-          <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setState)} />
-          <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setState)} />
+          <Validationinput type="text" placeholder="이름" disabled={false} handleSetState={handleSetState('fullName', setForm)} />
+          <Validationinput type="email" placeholder="이메일" disabled={false} validator={emailValidator} handleSetState={handleSetState('email', setForm)} />
+          <Validationinput type="password" placeholder="비밀번호" disabled={false} validator={passwordValidator} handleSetState={handleSetState('password', setForm)} />
         </div>
         <div>
           <Link to="#" onClick={onClickToGoogleSignUp}>구글 회원가입</Link>

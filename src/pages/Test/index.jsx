@@ -8,7 +8,7 @@ import {getProfileFlow, getFailProfileFlow} from '../../utils/flowInSaga'
 import * as R from 'ramda'
 
 const initState = {
-
+  data: null
 }
 
 const initProfile = {
@@ -27,8 +27,14 @@ const Test = () => {
   const history = useHistory()
 
   React.useEffect(() => {
-    dispatch(authRequest({apiCall: () => getProfile(), sagaFlow: getProfileFlow, failSagaFlow: getFailProfileFlow, history}))
+    getProfile(setState)
   },[])
+
+  React.useEffect(() => {
+    if(state.data){
+      dispatch(authRequest({resData: state.data, sagaFlow: getProfileFlow, failSagaFlow: getFailProfileFlow, history}))
+    }
+  }, [state.data])
 
   React.useLayoutEffect(() => {
     const profileData = R.pick(['id', 'fullName', 'username', 'email'], reduxProfile)
@@ -41,7 +47,8 @@ const Test = () => {
   }, [reduxProfile])
   
   return (
-    <div>
+    <React.Suspense fallback={<div>testing~~</div>}>
+      <div>
       <h2>test</h2>
       <ul>
         {
@@ -51,6 +58,7 @@ const Test = () => {
         }
       </ul>
     </div>
+    </React.Suspense>
   )
 }
 

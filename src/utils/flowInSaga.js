@@ -1,9 +1,5 @@
 import { put } from 'redux-saga/effects'
-import {
-  setProfile,
-  getProfileSuccess,
-  getProfileFailure,
-} from '../store/reducers/profileSlice'
+import { setProfile, getProfileSuccess } from '../store/reducers/profileSlice'
 
 export const signinFlow = ({ data, history }) => {
   history.push('/test')
@@ -16,7 +12,7 @@ export const signinGoogleFlow = ({ data }) => {
 }
 
 export const signupFlow = ({ data, history }) => {
-  history.push('/signin')
+  history.push('/test')
   return put(setProfile(data))
 }
 
@@ -35,5 +31,4 @@ export const getProfileFlow = ({ data }) => {
 
 export const getFailProfileFlow = ({ data, history }) => {
   history.push('/signin')
-  return put(getProfileFailure(data))
 }

@@ -17,7 +17,9 @@ const PATH = {
 
 export const postAxios = (path, params) => {
   console.log('params', params)
-  return axios.post(URL + path, params, { withCredentials: true })
+  return axios
+    .post(URL + path, params, { withCredentials: true })
+    .then((res) => res.data)
 }
 
 export const getAxios = (path, params) => {
@@ -26,46 +28,74 @@ export const getAxios = (path, params) => {
     Authorization: `Bearer ${token}`,
   }
   return params
-    ? axios.get(URL + path, params, { headers, withCredentials: true })
-    : axios.get(URL + path, { headers, withCredentials: true })
+    ? axios
+        .get(URL + path, params, { headers, withCredentials: true })
+        .then((res) => res.data)
+    : axios
+        .get(URL + path, { headers, withCredentials: true })
+        .then((res) => res.data)
 }
 
-export const signinApi = (data) => {
+export const signinApi = async (data, setState) => {
   const params = data
-  return call(postAxios, PATH.signin, params)
+  const res = await postAxios(PATH.signin, params)
+  setState((draft) => {
+    draft.data = res
+  })
 }
 
-export const signinGoogleApi = (data) => {
+export const signinGoogleApi = async (data, setState) => {
   const params = data
-  return call(postAxios, PATH.signinGoogle, params)
+  const res = await postAxios(PATH.signinGoogle, params)
+  setState((draft) => {
+    draft.data = res
+  })
 }
 
-export const signupApi = (data) => {
+export const signupApi = async (data, setState) => {
   const params = data
-  return call(postAxios, PATH.signup, params)
+  const res = await postAxios(PATH.signup, params)
+  setState((draft) => {
+    draft.data = res
+  })
 }
 
-export const signupGoogleApi = (data) => {
+export const signupGoogleApi = async (data, setState) => {
   const params = data
-  return call(postAxios, PATH.signupGoogle, params)
+  const res = await postAxios(PATH.signupGoogle, params)
+  setState((draft) => {
+    draft.data = res
+  })
 }
 
-export const sendResetEmail = (data) => {
+export const sendResetEmail = async (data, setState) => {
   const params = data
-  return call(postAxios, PATH.sendResetEmail, params)
+  const res = await postAxios(PATH.sendResetEmail, params)
+  setState((draft) => {
+    draft.data = res
+  })
 }
 
-export const checkResetPasswordToken = (data) => {
+export const checkResetPasswordToken = async (data, setState) => {
   const params = data
-  return call(getAxios, `${PATH.checkResetPasswordToken}/${params}`)
+  const res = await getAxios(`${PATH.checkResetPasswordToken}/${params}`)
+  setState((draft) => {
+    draft.data = res
+    draft.checkOk = res.type ? true : false
+  })
 }
 
-export const resetPassword = (data) => {
+export const resetPassword = async (data, setState) => {
   const params = data
-  return call(postAxios, PATH.resetPassword, params)
+  const res = await postAxios(PATH.resetPassword, params)
+  setState((draft) => {
+    draft.data = res
+  })
 }
 
-export const getProfile = (data) => {
-  const params = data
-  return call(getAxios, PATH.getProfile)
+export const getProfile = async (setState) => {
+  const res = await getAxios(PATH.getProfile)
+  setState((draft) => {
+    draft.data = res
+  })
 }

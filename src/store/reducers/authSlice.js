@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const initState = {
-  state: null,
-  disabled: false,
-  error: [],
-  isValid: false,
-  isFetching: false,
   fields: {
     fullName: '',
     fullNameHasError: false,
@@ -22,24 +17,7 @@ const authSlice = createSlice({
   name: 'authSlice',
   initialState: initState,
   reducers: {
-    authRequest: (state, action) => {
-      state.isFetching = true
-      state.error = []
-      state.isValid = false
-    },
-    authSuccess: (state, action) => {
-      state.isFetching = false
-      state.isValid = true
-    },
-    authFailure: (state, action) => {
-      state.isFetching = false
-      state.isValid = false
-      state.error = action.payload
-    },
-    errorCatch: (state, action) => {
-      state.isFetching = false
-      state.error = action.payload
-    },
+    authRequest: (state, action) => {},
     authOut: (state, action) => {
       state = initState
     },
@@ -49,12 +27,5 @@ const authSlice = createSlice({
   },
 })
 
-export const {
-  authRequest,
-  authSuccess,
-  authFailure,
-  errorCatch,
-  authOut,
-  setInit,
-} = authSlice.actions
+export const { authRequest, authOut, setInit } = authSlice.actions
 export default authSlice.reducer
